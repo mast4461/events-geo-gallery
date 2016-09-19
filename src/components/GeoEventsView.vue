@@ -44,6 +44,12 @@ export default {
     accessToken () {
       server.setAccessToken(this.accessToken)
       this.fetchEvents()
+    },
+
+    geoEvents () {
+      if (this.geoEvents.length === 1) {
+        this.selectedGeoEvent = this.geoEvents[0]
+      }
     }
   },
 
