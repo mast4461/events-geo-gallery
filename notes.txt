@@ -1,0 +1,2 @@
+To modify a webpack project for deploy to github pages,
+just set the asset public path in config/index.js
