@@ -98,7 +98,7 @@ function treeToEventData (tree) {
             name: child.name,
             path: child.item.path_lower,
             getThumbnailBlob () {
-              return dbx.filesGetThumbnail({path: child.item.path_lower, size: 'w640h480'})
+              return dbx.filesGetThumbnail({path: child.item.id, size: 'w640h480'})
                 .then(response => response.fileBlob)
             }
           }))
