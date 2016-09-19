@@ -9,7 +9,7 @@
     </template>
 
     <div id="categories">
-      <category-view v-for="category in checkedCategories" :category-data="category"></category-view>
+      <category-view v-for="category in categories" :category-data="category" v-show="checkedCategories.includes(category)"></category-view>
       <div v-if="categories.length === 0">No image categories for this location</div>
     </div>
   </div>
