@@ -2,6 +2,45 @@
 const L = window.L
 var map
 
+class Marker {
+  constructor (latLng, onClick, title) {
+    const options = {}
+    if (title !== undefined) {
+      options.title = title
+    }
+
+    this.marker = L.marker(latLng, options).addTo(map)
+
+    if (title !== undefined) {
+      this.marker.bindPopup(title)
+    }
+
+    if (onClick) {
+      this.onClick = onClick
+      this.marker.on('click', onClick)
+    }
+  }
+
+  destroy () {
+    map.removeLayer(this.marker)
+    if (this.onClick) {
+      this.marker.off('click', this.onClick)
+    }
+  }
+
+  setLatLng (latLng) {
+    this.marker.setLatLng(latLng)
+  }
+
+  openPopup () {
+    this.marker.openPopup()
+  }
+
+  closePopup () {
+    this.marker.closePopup()
+  }
+}
+
 export default {
   createMap (element) {
     map = L.map(element)
@@ -13,24 +52,8 @@ export default {
     }).addTo(map)
   },
 
-  addMarker (latLng, onClick) {
-    const marker = L.marker(latLng).addTo(map)
-
-    if (onClick) {
-      marker.on('click', onClick)
-    }
-
-    return {
-      destroy () {
-        map.removeLayer(marker)
-        if (onClick) {
-          marker.off('click', onClick)
-        }
-      },
-      setLatLng (latLng) {
-        marker.setLatLng(latLng)
-      }
-    }
+  addMarker (latLng, onClick, title) {
+    return new Marker(latLng, onClick, title)
   },
 
   setView (latLng, zoom) {

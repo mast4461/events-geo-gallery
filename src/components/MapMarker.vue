@@ -9,6 +9,12 @@ export default {
     },
     clickHandler: {
       type: Function
+    },
+    title: {
+      type: String
+    },
+    isSelected: {
+      type: Boolean
     }
   },
   data: () => ({
@@ -16,7 +22,7 @@ export default {
   }),
 
   ready () {
-    this.marker = map.addMarker(this.latLng, this.clickHandler)
+    this.marker = map.addMarker(this.latLng, this.clickHandler, this.title)
   },
 
   beforeDestroy () {
@@ -26,6 +32,13 @@ export default {
   watch: {
     latLng () {
       this.marker.setLatLng(this.latLng)
+    },
+    isSelected () {
+      if (this.isSelected) {
+        this.marker.openPopup()
+      } else {
+        this.marker.closePopup()
+      }
     }
   }
 }

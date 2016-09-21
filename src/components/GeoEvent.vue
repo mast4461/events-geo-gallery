@@ -8,7 +8,7 @@
 
     <location-view v-if="selectedLocation" :location-data="selectedLocation"></location-view>
 
-    <map-marker v-for="location in locationsWithCoordinates" :lat-lng="location.latLng" :click-handler="getLocationSelector(location)"></map-marker>
+    <map-marker v-for="location in locationsWithCoordinates" :lat-lng="location.latLng" :click-handler="getLocationSelector(location)" :title="location.name" :is-selected="location === selectedLocation"></map-marker>
   </div>
 </template>
 
@@ -63,11 +63,21 @@ export default {
     getLocationSelector (location) {
       return () => {
         this.selectedLocation = location
+        this.viewSelectedLocation()
       }
     },
 
     zoomToExtent () {
       map.fitLatLngs(this.latLngs)
+    },
+
+    viewSelectedLocation () {
+      const latLng = this.selectedLocation.latLng
+      if (latLng) {
+        map.setView(this.selectedLocation.latLng)
+      } else {
+        this.zoomToExtent()
+      }
     }
   },
 
@@ -77,12 +87,7 @@ export default {
     },
 
     selectedLocation () {
-      const latLng = this.selectedLocation.latLng
-      if (latLng) {
-        map.setView(this.selectedLocation.latLng)
-      } else {
-        this.zoomToExtent()
-      }
+      this.viewSelectedLocation()
     }
   },
 
