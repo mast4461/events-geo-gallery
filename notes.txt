@@ -1,2 +1,3 @@
-To modify a webpack project for deploy to github pages,
-just set the asset public path in config/index.js
+To modify a webpack project for deploy to github pages, just set the asset public path in config/index.js
+
+Sort files and folders alphabetically?

@@ -1,13 +1,25 @@
 import Dropbox from 'dropbox'
 import readBlob from 'read-blob'
+import { getAccessToken } from './location-parser'
 
-// There should be no problem publicizing this access token
-// as it is scoped to the app folder and the app folder
-// is intended to only contain public content anyway.
-// HOWEVER, it would allow an attacker to _delete_ all content in the folder
-const dbx = new Dropbox({
-  accessToken: getStoredAccessToken()
-})
+const dbx = new Dropbox()
+
+function init () {
+  console.log('initializing')
+  return new Promise((resolve, reject) => {
+    const token = getAccessToken()
+    if (token === undefined) {
+      console.log('Token not found in URL')
+      reject('Token not found in URL')
+
+      // Hmm, the following URL should probably be a configuration setting...
+      window.location = 'https://www.dropbox.com/1/oauth2/authorize?client_id=iybymu5ptwg7vkc&response_type=token&redirect_uri=https://mast4461.github.io/events-geo-gallery/'
+    } else {
+      dbx.setAccessToken(token)
+      resolve()
+    }
+  })
+}
 
 class Folder {
   constructor (dropboxResponseEntry) {
@@ -156,14 +168,6 @@ function filesListFolder (options) {
     }).catch(logAndRethrowError)
 }
 
-function getStoredAccessToken () {
-  return window.localStorage.getItem('token')
-}
-
-function setStoredAccessToken (token) {
-  window.localStorage.setItem('token', token)
-}
-
 function logAndRethrowError (error) {
   console.log(error)
   throw error
@@ -174,12 +178,5 @@ export default {
     return filesListFolder({path: ''})
   },
 
-  setAccessToken (token) {
-    dbx.setAccessToken(token)
-    setStoredAccessToken(token)
-  },
-
-  getAccessToken () {
-    return dbx.getAccessToken()
-  }
+  init
 }

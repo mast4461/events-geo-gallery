@@ -1,9 +1,5 @@
 <template>
   <div>
-    <label for="token">Access token</label>
-    <input type="password" name="token" v-model="accessToken">
-    <br>
-
     <label for="event-selector">Event</label>
     <select name="event-selector" id="event-selector" v-model="selectedGeoEvent">
       <option v-for="geoEvent in geoEvents" :value="geoEvent">{{geoEvent.name}}</option>
@@ -27,8 +23,7 @@ export default {
   data: () => ({
     msg: 'hello',
     geoEvents: [],
-    selectedGeoEvent: undefined,
-    accessToken: server.getAccessToken()
+    selectedGeoEvent: undefined
   }),
   // data () {
   //   return {
@@ -37,15 +32,12 @@ export default {
   // },
   ready () {
     map.createMap('map-container')
-    this.fetchEvents()
+    server.init()
+      .catch(err => console.log(err))
+      .then(this.fetchEvents)
   },
 
   watch: {
-    accessToken () {
-      server.setAccessToken(this.accessToken)
-      this.fetchEvents()
-    },
-
     geoEvents () {
       if (this.geoEvents.length === 1) {
         this.selectedGeoEvent = this.geoEvents[0]
