@@ -21,9 +21,7 @@ class Folder {
 
   getThumbnail () {
     return dbx.filesGetThumbnail({path: this.path})
-      .catch(function (error) {
-        console.log(error)
-      })
+      .catch(logAndRethrowError)
   }
 
   getLatLng () {
@@ -37,7 +35,7 @@ class Folder {
       .then(flatListToTree)
       .then(treeToEventData)
       .then(populateTreeWithCoordinates)
-      .catch(err => console.log(err))
+      .catch(logAndRethrowError)
   }
 }
 
@@ -155,9 +153,7 @@ function filesListFolder (options) {
   return dbx.filesListFolder(options)
     .then(function (response) {
       return response.entries.map(entry => new Folder(entry))
-    }).catch(function (error) {
-      console.log(error)
-    })
+    }).catch(logAndRethrowError)
 }
 
 function getStoredAccessToken () {
@@ -166,6 +162,11 @@ function getStoredAccessToken () {
 
 function setStoredAccessToken (token) {
   window.localStorage.setItem('token', token)
+}
+
+function logAndRethrowError (error) {
+  console.log(error)
+  throw error
 }
 
 export default {
