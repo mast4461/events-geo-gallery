@@ -1,6 +1,6 @@
 import Dropbox from 'dropbox'
 import readBlob from 'read-blob'
-import { getAccessToken } from './location-parser'
+import { getAccessToken } from './window-location-parser'
 
 const dbx = new Dropbox()
 
@@ -44,6 +44,10 @@ class Folder {
 
   getEventData () {
     return dbx.filesListFolder({path: this.path, recursive: true})
+      .then(raw => {
+        console.log({raw})
+        return raw
+      })
       .then(flatListToTree)
       .then(treeToEventData)
       .then(populateTreeWithCoordinates)
