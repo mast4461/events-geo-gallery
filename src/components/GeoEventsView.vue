@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label for="event-selector">Event</label>
+    <label for="event-selector">Event:</label>
     <select name="event-selector" id="event-selector" v-model="selectedGeoEvent">
       <option v-for="geoEvent in geoEvents" :value="geoEvent">{{geoEvent.name}}</option>
     </select>

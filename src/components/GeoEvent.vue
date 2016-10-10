@@ -1,10 +1,11 @@
 <template>
   <div>
     <h2>{{eventMetaData.name}}</h2>
+
+    <label for="location-selector">Location:</label>
     <select name="location-selector" id="location-selector" v-model="selectedLocation">
       <option v-for="location in locations" :value="location">{{location.name}}</option>
     </select>
-    <label for="location-selector">Select a location</label>
 
     <location-view v-if="selectedLocation" :location-data="selectedLocation"></location-view>
 

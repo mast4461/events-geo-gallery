@@ -48,6 +48,7 @@ class Folder {
         console.log({raw})
         return raw
       })
+      .then(sortEntries)
       .then(flatListToTree)
       .then(treeToEventData)
       .then(populateTreeWithCoordinates)
@@ -59,6 +60,22 @@ function downloadJson (path) {
   return dbx.filesDownload({path: path})
     .then(downloadData => readBlob(downloadData.fileBlob, 'text'))
     .then(JSON.parse)
+}
+
+function sortEntries (dropboxResponse) {
+  dropboxResponse.entries = dropboxResponse.entries.sort((a, b) => {
+    var pathA = a.path_lower
+    var pathB = b.path_lower
+    if (pathA < pathB) {
+      return -1
+    } else if (pathA > pathB) {
+      return 1
+    } else {
+      return 0
+    }
+  })
+
+  return dropboxResponse
 }
 
 // From http://brandonclapp.com/arranging-an-array-of-flat-paths-into-a-json-tree-like-structure/

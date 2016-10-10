@@ -10,7 +10,7 @@
 
     <div id="categories">
       <category-view v-for="category in categories" :category-data="category" v-show="checkedCategories.includes(category)"></category-view>
-      <div v-if="categories.length === 0">No image categories for this location</div>
+      <div v-if="categories.length === 0">No images for this location</div>
     </div>
   </div>
 </template>
