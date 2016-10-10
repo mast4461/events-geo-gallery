@@ -1,17 +1,26 @@
 <template>
   <div>
-    <img class="thumbnail" :src="imgSrc" :alt="imageData.path">
+    <img class="thumbnail" :src="imgSrc" :alt="imageData.path" @click="fullScreen">
     <p>{{imageData.name}}</p>
+
+    <fullscreen-image :show="isFullscreen" :img-src="imgSrc" :alt="imageData.path" :text="imageData.name"></fullscreen-image>
   </div>
 </template>
 
 <script>
+import FullscreenImage from './FullscreenImage.vue'
 const URL = window.URL || window.webkitURL
+
 export default {
   props: ['imageData'],
 
+  components: {
+    FullscreenImage
+  },
+
   data: () => ({
-    imgSrc: ''
+    imgSrc: '',
+    isFullscreen: false
   }),
 
   methods: {
@@ -27,6 +36,11 @@ export default {
       if (this.imgSrc) {
         URL.revokeObjectURL(this.imgSrc)
       }
+    },
+
+    fullScreen () {
+      console.log('fullScreen')
+      this.isFullscreen = !this.isFullscreen
     }
   },
 
@@ -47,8 +61,10 @@ export default {
 </script>
 
 <style>
-.thumbnail {
+.thumbnail, .fullscreen {
   max-width: 100%;
   max-height: 100%;
+  cursor: pointer;
 }
+
 </style>
