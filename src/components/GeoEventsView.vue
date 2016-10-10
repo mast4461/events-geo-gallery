@@ -13,8 +13,8 @@
 
 <script>
 import GeoEvent from './GeoEvent.vue'
-import server from '../libs/server'
-import map from '../libs/map'
+import server from '../modules/server'
+import map from '../modules/map'
 
 export default {
   components: {

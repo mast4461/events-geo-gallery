@@ -17,7 +17,7 @@
 
 <script>
 import CategoryView from './CategoryView.vue'
-// import map from '../libs/map'
+// import map from '../modules/map'
 
 export default {
   props: ['locationData'],

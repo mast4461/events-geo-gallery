@@ -1,5 +1,5 @@
 <script>
-import map from '../libs/map'
+import map from '../modules/map'
 
 export default {
   props: {

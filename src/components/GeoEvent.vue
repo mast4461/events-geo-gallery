@@ -15,7 +15,7 @@
 <script>
 import LocationView from './LocationView.vue'
 import MapMarker from './MapMarker.vue'
-import map from '../libs/map'
+import map from '../modules/map'
 
 export default {
   props: ['eventMetaData'],
