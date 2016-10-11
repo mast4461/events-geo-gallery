@@ -1,5 +1,4 @@
 import Dropbox from 'dropbox'
-import readBlob from 'read-blob'
 import { getAccessToken } from './window-location-parser'
 
 const dbx = new Dropbox()
@@ -36,12 +35,6 @@ class Folder {
       .catch(logAndRethrowError)
   }
 
-  getLatLng () {
-    return downloadJson(this.path)
-      .then(geoJson => geoJson.features[0].geometry.coordinates)
-      .then(c => [c[1], c[0]])
-  }
-
   getEventData () {
     return dbx.filesListFolder({path: this.path, recursive: true})
       .then(raw => {
@@ -51,15 +44,8 @@ class Folder {
       .then(sortEntries)
       .then(flatListToTree)
       .then(treeToEventData)
-      .then(populateTreeWithCoordinates)
       .catch(logAndRethrowError)
   }
-}
-
-function downloadJson (path) {
-  return dbx.filesDownload({path: path})
-    .then(downloadData => readBlob(downloadData.fileBlob, 'text'))
-    .then(JSON.parse)
 }
 
 function sortEntries (dropboxResponse) {
@@ -134,15 +120,15 @@ function treeToEventData (tree) {
             }
           }))
         })),
-      getGeoJson () {
-        const locationEntry = child.children.find(child => /\.geo\.json/.test(child.name))
+      latLng: (function () {
+        const locationEntry = child.children.find(child => /\.latLng/i.test(child.name))
         if (locationEntry) {
-          return downloadJson(locationEntry.item.path_lower)
-        } else {
-          return Promise.resolve(undefined)
+          const numbers = locationEntry.name.match(/\d+/g)
+          const lat = +(numbers[0] + '.' + numbers[1])
+          const lng = +(numbers[2] + '.' + numbers[3])
+          return [lat, lng]
         }
-      },
-      latLng: undefined
+      })()
     }))
   }
 
@@ -159,27 +145,6 @@ function treeToEventData (tree) {
   })
 
   return reshapedTree
-}
-
-function populateTreeWithCoordinates (tree) {
-  const promises = tree.locations.map(location => {
-    return location.getGeoJson().then(geoJson => {
-      if (geoJson) {
-        delete location.getGeoJson
-        location.latLng = geoJsonToLatLng(geoJson)
-      }
-    })
-  })
-
-  return Promise.all(promises).then(() => {
-    console.log('returning tree')
-    return tree
-  })
-}
-
-function geoJsonToLatLng (geoJson) {
-  const lngLat = geoJson.features[0].geometry.coordinates
-  return [lngLat[1], lngLat[0]]
 }
 
 function filesListFolder (options) {

@@ -14,7 +14,6 @@
   "dependencies": {
     "babel-runtime": "^6.0.0",
     "dropbox": "^2.1.0",
-    "read-blob": "^1.1.0",
     "vue": "^1.0.21"
   },
   "devDependencies": {
@@ -43,6 +42,7 @@
     "html-webpack-plugin": "^2.8.1",
     "http-proxy-middleware": "^0.12.0",
     "json-loader": "^0.5.4",
+    "mkdirp": "^0.5.1",
     "ora": "^0.2.0",
     "shelljs": "^0.6.0",
     "url-loader": "^0.5.7",
